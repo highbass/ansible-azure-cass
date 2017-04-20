@@ -1,0 +1,20 @@
+---
+- name: 'upgrade (5.0) | Copy template files'
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+    owner: cassandra
+    group: cassandra
+  with_items:
+    - { src: "etc/dse/cassandra/cassandra.yaml.j2", dest: "/etc/dse/cassandra/cassandra.yaml" }
+    - { src: "etc/dse/cassandra/cassandra-rackdc.properties.j2", dest: "/etc/dse/cassandra/cassandra-rackdc.properties" }
+  notify: "restart cassandra"
+
+- name: enable service
+  service:
+    name: dse
+    enabled: yes
+
+- name: start dse
+  command: /etc/init.d/dse start

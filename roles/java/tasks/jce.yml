@@ -1,0 +1,9 @@
+---
+- name: copy zip over
+  unarchive:
+    copy: true
+    dest: /tmp
+    src: jce_policy-8.zip 
+
+- name: cp jar files over
+  shell: "mv /tmp/UnlimitedJCEPolicyJDK8/*.jar /usr/java/jdk1.8.0_112/jre/lib/security/"

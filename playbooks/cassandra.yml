@@ -1,0 +1,39 @@
+---
+- hosts: Role_seednode:&Application_cassandra
+  gather_facts: yes
+  become: yes
+  become_user: root
+  vars_files:
+    - ../vars/cassandra.yml
+
+  pre_tasks:
+    - name: checking platformFaultDomain
+      local_action: command az vm get-instance-view -n {{ inventory_hostname }} -g cassandra_dev --query instanceView.platformFaultDomain
+      register: platformFaultDomain
+      ignore_errors: true
+      become: no
+      become_user: zbutt
+
+    - name: checking platformFaultDomain
+      local_action: command az vm get-instance-view -n {{ inventory_hostname }} -g cassandra_dev --query instanceView.platformUpdateDomain
+      register: platformUpdateDomain
+      ignore_errors: true
+      become: no
+      become_user: zbutt
+
+  roles:
+    - role: java
+      java_version: 8
+      java_subversion: 112
+      java_download_from_oracle: true
+      java_remove_download: false
+      jce_extentions: true
+
+    - role: cassandra
+      fault_domain: "{{ platformFaultDomain.stdout }}"
+      update_domain:  "{{ platformUpdateDomain.stdout }}"
+      cluster_name: 'Test Cluster'
+      listen_address: "{{ private_ip }}"
+      broadcast_address: "{{ public_ip }}"
+      broadcast_rpc_address: "{{ private_ip }}"
+      seeds: "{{ groups['Role_seednode'] | map('extract', hostvars, ['private_ip']) | join(',') }}"

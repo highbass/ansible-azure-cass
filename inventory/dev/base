@@ -1,0 +1,9 @@
+[localhost]
+127.0.0.1
+
+[Environment_dev]
+[Role_seednode]
+
+[dev:children]
+localhost
+Environment_dev

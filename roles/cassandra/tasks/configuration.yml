@@ -1,0 +1,22 @@
+---
+- name: 'Add datastax repositoray in RHEL'
+  yum_repository:
+    name: 'datastax'
+    description: 'Datastax Repo'
+    baseurl: 'https://{{ dse_repo_username }}:{{ dse_repo_pass }}@rpm.datastax.com/enterprise'
+    gpgcheck: 'no'
+    enabled: 'yes'
+
+- sysctl:
+    name: vm.max_map_count
+    value: 1048575
+    state: present
+
+- name: set swapiness
+  sysctl:
+    name: vm.swappiness
+    value: "0"
+
+- nane: set selinux
+  selinux:
+  state: disabled

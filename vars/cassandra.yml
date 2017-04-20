@@ -1,0 +1,6 @@
+---
+dse_repo_username: 'zohaib.butt%40xxxx.com'
+dse_repo_pass: 'XXXX'
+
+# replace with newest version... could look into completely ommiting but have to handle version inconsistency across cluster in that scenario
+version_50: 5.0.8-1

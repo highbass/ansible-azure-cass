@@ -1,0 +1,4 @@
+---
+- name: restart dse
+  command: /etc/init.d/dse restart
+  listen: "restart cassandra"
